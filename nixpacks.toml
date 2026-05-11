@@ -1,5 +1,19 @@
 [phases.setup]
-nixPkgs = ["php83", "php83Extensions.pdo", "php83Extensions.pdo_mysql", "php83Extensions.mbstring", "php83Extensions.xml", "php83Extensions.curl", "php83Extensions.zip", "php83Extensions.gd", "nodejs_20", "nodePackages.npm"]
+nixPkgs = [
+  "php83",
+  "php83Extensions.pdo",
+  "php83Extensions.pdo_mysql",
+  "php83Extensions.mbstring",
+  "php83Extensions.xml",
+  "php83Extensions.curl",
+  "php83Extensions.zip",
+  "php83Extensions.gd",
+  "php83Extensions.fileinfo",
+  "php83Extensions.tokenizer",
+  "nginx",
+  "nodejs_20",
+  "nodePackages.npm"
+]
 
 [phases.install]
 cmds = [
@@ -8,5 +22,12 @@ cmds = [
   "npm run build"
 ]
 
+[phases.build]
+cmds = [
+  "php artisan config:cache",
+  "php artisan route:cache",
+  "php artisan view:cache"
+]
+
 [start]
-cmd = "php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT"
+cmd = "php artisan migrate --force && php-fpm -D && nginx -c /app/nginx.conf -g 'daemon off;'"
