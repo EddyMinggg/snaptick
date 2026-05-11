@@ -7,17 +7,15 @@
 NODE_OPTIONS = "--max_old_space_size=512"
 # 允許 Root 執行（消除警告）
 COMPOSER_ALLOW_SUPERUSER = "1"
-# 這是最關鍵的一行！強迫 Composer 忽略版本檢查，直接安裝
-COMPOSER_IGNORE_PLATFORM_REQS = "1"
 
 [phases.setup]
-# 強制指定系統套件：這裡我們不再依賴 Nixpacks 的猜測，直接安裝 php84
+# 強制指定系統套件為 php84，確保 Laravel 11/13 需要的最低版本
 nixPkgs = ["php84", "php84Packages.composer", "nodejs"]
 
 [phases.install]
-# 我們在這裡手動帶入環境變數，確保 composer install 時 100% 忽略平台檢查
+# 直接使用 --ignore-platform-reqs 參數，確保 Composer 忽略版本檢查
 cmds = [
-    "COMPOSER_IGNORE_PLATFORM_REQS=1 composer install --optimize-autoloader --no-dev --no-interaction",
+    "composer install --optimize-autoloader --no-dev --no-interaction --ignore-platform-reqs",
     "npm ci",
     "npm run build"
 ]
