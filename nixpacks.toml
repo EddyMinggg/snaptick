@@ -3,21 +3,8 @@
 - "node"
 
 [variables]
-# 限制 Node.js 記憶體以防止 137 錯誤
 NODE_OPTIONS = "--max_old_space_size=512"
-# 允許 Composer 以 root 身分執行外掛（解決警告）
-COMPOSER_ALLOW_SUPERUSER = "1"
-
-[phases.setup]
-# 強制指定使用 PHP 8.4
-nixPkgs = ["php84", "php84Packages.composer", "nodejs"]
-
-[phases.install]
-cmds = [
-    "composer install --optimize-autoloader --no-dev --no-interaction",
-    "npm ci",
-    "npm run build"
-]
+COMPOSER_IGNORE_PLATFORM_REQS = "1"
 
 [phases.build]
 cmds = [
