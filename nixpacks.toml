@@ -22,6 +22,10 @@ cmds = [
 
 [phases.build]
 cmds = [
+    # 執行前端套件安裝與編譯
+    "npm ci",
+    "npm run build",
+    # Laravel 快取指令
     "php artisan config:cache",
     "php artisan route:cache",
     "php artisan view:cache",
