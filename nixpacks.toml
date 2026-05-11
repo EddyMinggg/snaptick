@@ -3,25 +3,12 @@
 - "node"
 
 [variables]
-# 限制 Node.js 記憶體以防止 137 錯誤
+# 限制 Node 記憶體避免 137 錯誤
 NODE_OPTIONS = "--max_old_space_size=512"
-# 強制 Composer 忽略系統 PHP 版本的警告硬裝套件
+# 這個變數在 Railway 系統層級告訴 Composer 忽略系統版本需求
 COMPOSER_IGNORE_PLATFORM_REQS = "1"
-# 允許 Composer 以 root 身分執行外掛
+# 允許 Root 執行（消除警告）
 COMPOSER_ALLOW_SUPERUSER = "1"
-
-[phases.setup]
-# 明確指定使用 PHP 8.3 (因為 PHP 8.4 在 Nixpacks 中可能名稱不是 php84)
-# 並且加上常用的 php 擴充功能確保 Laravel 順利運行
-nixPkgs = ["php83", "php83Packages.composer", "nodejs"]
-
-[phases.install]
-# 我們加入 COMPOSER_IGNORE_PLATFORM_REQS=1 到指令中，確保它被吃進去
-cmds = [
-    "COMPOSER_IGNORE_PLATFORM_REQS=1 composer install --optimize-autoloader --no-dev --no-interaction",
-    "npm ci",
-    "npm run build"
-]
 
 [phases.build]
 cmds = [
